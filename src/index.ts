@@ -254,10 +254,20 @@ export function DragHandlePlugin(
       if (!handleBySelector) {
         view?.dom?.parentElement?.appendChild(dragHandleElement);
       }
-      view?.dom?.parentElement?.addEventListener(
-        'mouseout',
-        hideHandleOnEditorOut,
-      );
+      // Attach the event listener to view.dom directly
+      const editorElement = view.dom;
+      
+      // Define the event handler function so it can be referenced for removal
+      const mouseOutEventHandler = (event: MouseEvent) => {
+        hideHandleOnEditorOut(event);
+      };
+
+      if (editorElement) {
+        editorElement.addEventListener(
+          'mouseout',
+          mouseOutEventHandler
+        );
+      }
 
       return {
         destroy: () => {
@@ -270,10 +280,12 @@ export function DragHandlePlugin(
             onDragHandleDragStart,
           );
           dragHandleElement = null;
-          view?.dom?.parentElement?.removeEventListener(
-            'mouseout',
-            hideHandleOnEditorOut,
-          );
+          if (editorElement) {
+            editorElement.removeEventListener(
+              'mouseout',
+              mouseOutEventHandler, // Use the stored handler function
+            );
+          }
         },
       };
     },
