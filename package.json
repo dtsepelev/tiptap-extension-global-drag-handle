@@ -34,8 +34,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "npm run clean && rollup -c",
-    "prepare": "npm run build"
+    "build": "npm run clean && rollup -c"
   },
   "devDependencies": {
     "@atomico/rollup-plugin-sizes": "^1.1.4",
